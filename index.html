@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>js quiz</title>
+    
+    <style>
+        /* CSS styles for the button */
+        #submit {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        #submit:hover {
+            background-color: #45a049;
+        }
+    </style>
+    
+    <style>
+        /* Add a gap after each question and its answers */
+        .question-container {
+            margin-bottom: 20px; /* Adjust the value to increase/decrease the gap */
+        }
+    </style>
+</head>
+<body style="background-color: black; color: aliceblue; display: flex; justify-content: center; align-items: center; align-content: center; flex-direction: column; margin: 50px; gap: 20px; font-size: larger; font-weight: 900 ; border: 5px solid white;" >
+
+    <h1>Javascript Quiz App</h1>
+    <div id="quiz"></div>
+    <button id="submit">Submit</button>
+    <div id="results"></div>
+    
+    <style>
+        /* Add a gap after each answer */
+        .myQuestions {
+            display: block;
+            margin-bottom: 20px; /* Adjust the value to increase/decrease the gap */
+        }
+    </style>
+
+    <script>
+       const quizcontainer = document.getElementById("quiz")
+       const submitButton = document.getElementById("submit")
+       const resultscontainer = document.getElementById("results")
+
+       const myQuestions = [
+        {
+            question: "What is sirname of Sahil ?",
+            answers: {
+                a: "Malik",
+                b: "Hooda",
+                c: "Sehrawat",
+                d: "Maan"
+            },
+            correctAnswer: "b"
+        },
+        {
+            question: "What is age of Sahil ?",
+            answers: {
+                a: "20",
+                b: "21",
+                c: "22",
+                d: "23"
+            },
+            correctAnswer: "c"
+        },
+        {
+            question: "What is height of Sahil ?",
+            answers: {
+                a: "5.10",
+                b: "5.9",
+                c: "5.11",
+                d: "5.8"
+            },
+            correctAnswer: "a"
+        },
+       ];
+       function buildQuiz (){
+        const output = []
+
+        myQuestions.forEach((currentQuestion, questionNumber) => {
+            const answers = []
+
+            for(let letter in currentQuestion.answers){
+                answers.push(
+                    `<label><input type="radio" name="question${questionNumber}"
+                        value="${letter}"/>${letter} :${currentQuestion.answers [letter]}</label>`
+                )
+            }
+            // console.log(answers);
+            output.push(`<div class="question-container">
+                <div class="question">${currentQuestion.question}</div>
+                <div class="answers">${answers.join("")}</div>
+                </div>`
+            )
+        })
+          // Adding the HTML to the quiz container
+          quizcontainer.innerHTML = output.join("");
+       };
+       function showResults (){
+        const answerContainers = quizcontainer.querySelectorAll(".answers")
+        let numCorrect = 0
+
+        myQuestions.forEach((currentQuestion, questionNumber) => {
+            // find selected answer
+            const answerContainer = answerContainers[questionNumber]
+            // input [ name=question1]:checked
+            const selector = `input[name=question${questionNumber}]:checked`;
+            const userAnswer = (answerContainer.querySelector(selector) || {}).value
+
+            if (userAnswer === currentQuestion.correctAnswer) {
+                numCorrect++
+                answerContainers[questionNumber].style.color = "lightgreen"
+            } else {
+                answerContainers[questionNumber].style.color = "orange"
+            }
+        })
+        resultscontainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`
+       }
+
+       buildQuiz()
+       submitButton.addEventListener("click", showResults)
+
+    </script>
+    
+</body>
+</html>
